@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | MediMate AI</title>
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f6f3ff;
+            color: #292344;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .login-card {
+            width: 100%;
+            max-width: 420px;
+            background: white;
+            padding: 35px;
+            border-radius: 20px;
+            box-shadow: 0 12px 40px #38216b18;
+        }
+        .logo {
+            text-align: center;
+            font-size: 27px;
+            font-weight: bold;
+            color: #7046e8;
+            margin-bottom: 25px;
+        }
+        h2 { text-align: center; margin-bottom: 10px; }
+        .subtitle {
+            text-align: center;
+            color: #827b98;
+            margin-bottom: 28px;
+            font-size: 14px;
+        }
+        label {
+            display: block;
+            margin: 17px 0 8px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        input {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #ded8ee;
+            border-radius: 9px;
+            font-size: 15px;
+        }
+        input:focus {
+            outline: 2px solid #d8caff;
+            border-color: #7046e8;
+        }
+        button {
+            width: 100%;
+            padding: 14px;
+            margin-top: 25px;
+            background: #7046e8;
+            color: white;
+            border: none;
+            border-radius: 9px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        button:hover { background: #5933c4; }
+        .bottom {
+            text-align: center;
+            margin-top: 22px;
+            font-size: 14px;
+            color: #827b98;
+        }
+        a { color: #7046e8; text-decoration: none; font-weight: bold; }
+        .back { display: block; text-align: center; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <div class="login-card">
+        <div class="logo">💜 MediMate AI</div>
+        <h2>Welcome Back!</h2>
+        <p class="subtitle">Login to manage your health routine.</p>
+
+        <form action="LoginServlet" method="post">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" name="email"
+                   placeholder="Enter your email" required>
+
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password"
+                   placeholder="Enter your password" required>
+
+            <button type="submit">Login →</button>
+        </form>
+
+        <p class="bottom">
+            Don't have an account? <a href="register.html">Register</a>
+        </p>
+
+        <a class="back" href="index.html">← Back to Home</a>
+    </div>
+</body>
+</html>
+

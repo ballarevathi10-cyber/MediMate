@@ -1,0 +1,17 @@
+# Secrets
+.env
+.env.*
+!.env.example
+config.properties
+secrets.properties
+
+# Java build output
+build/
+bin/
+target/
+
+# IDE
+.metadata/
+
+# Logs
+*.log

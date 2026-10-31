@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediMate AI | Personal Health Copilot</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f8f7ff;
+            color: #24213d;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 8%;
+            background: #ffffff;
+            box-shadow: 0 2px 15px rgba(40, 25, 80, 0.08);
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: bold;
+            color: #7046e8;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #48435f;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .nav-links a:hover {
+            color: #7046e8;
+        }
+
+        .nav-links .nav-button {
+            background: #7046e8;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 9px;
+        }
+
+        .hero {
+            min-height: 570px;
+            padding: 90px 8%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 50px;
+        }
+
+        .hero-content {
+            max-width: 600px;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 10px 16px;
+            background: #eee8ff;
+            color: #7046e8;
+            border-radius: 25px;
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 25px;
+        }
+
+        h1 {
+            font-size: clamp(38px, 5vw, 62px);
+            line-height: 1.15;
+            margin-bottom: 22px;
+        }
+
+        h1 span {
+            color: #7046e8;
+        }
+
+        .hero-content p {
+            color: #77728e;
+            font-size: 17px;
+            line-height: 1.8;
+            margin-bottom: 30px;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 15px 23px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+        .btn-primary {
+            background: #7046e8;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5933c4;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            border: 1px solid #d9d0f6;
+            color: #7046e8;
+            background: white;
+        }
+
+        .btn-secondary:hover {
+            background: #eee8ff;
+        }
+
+        .hero-card {
+            width: 340px;
+            min-width: 280px;
+            padding: 30px;
+            border-radius: 24px;
+            background: white;
+            box-shadow: 0 15px 50px rgba(76, 49, 150, 0.12);
+        }
+
+        .health-icon {
+            width: 65px;
+            height: 65px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #eee8ff;
+            color: #7046e8;
+            border-radius: 18px;
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+
+        .hero-card h2 {
+            font-size: 22px;
+            margin-bottom: 10px;
+        }
+
+        .hero-card > p {
+            color: #858098;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .feature-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 0;
+            border-top: 1px solid #f0edf7;
+        }
+
+        .feature-row .emoji {
+            font-size: 23px;
+        }
+
+        .feature-row strong {
+            display: block;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        .feature-row small {
+            color: #858098;
+        }
+
+        .features {
+            padding: 75px 8%;
+            background: white;
+            text-align: center;
+        }
+
+        .section-label {
+            color: #7046e8;
+            font-size: 13px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        .features h2 {
+            font-size: 34px;
+            margin: 15px 0;
+        }
+
+        .section-description {
+            color: #858098;
+            line-height: 1.7;
+            margin-bottom: 40px;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 22px;
+            text-align: left;
+        }
+
+        .feature-card {
+            padding: 28px;
+            border: 1px solid #eeeaf8;
+            border-radius: 18px;
+            background: #fcfbff;
+            transition: 0.2s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(76, 49, 150, 0.08);
+        }
+
+        .feature-card .emoji {
+            font-size: 30px;
+        }
+
+        .feature-card h3 {
+            margin: 18px 0 10px;
+            font-size: 18px;
+        }
+
+        .feature-card p {
+            color: #858098;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        .cta {
+            margin: 65px 8%;
+            padding: 55px 25px;
+            text-align: center;
+            border-radius: 24px;
+            background: linear-gradient(135deg, #7046e8, #9b72f5);
+            color: white;
+        }
+
+        .cta h2 {
+            font-size: 32px;
+            margin-bottom: 15px;
+        }
+
+        .cta p {
+            line-height: 1.7;
+            margin-bottom: 25px;
+            color: #f0eaff;
+        }
+
+        .cta .btn {
+            background: white;
+            color: #7046e8;
+        }
+
+        footer {
+            padding: 25px 8%;
+            background: white;
+            text-align: center;
+            color: #858098;
+            font-size: 13px;
+            border-top: 1px solid #eeeaf8;
+        }
+
+        @media (max-width: 800px) {
+            nav {
+                padding: 18px 5%;
+                flex-wrap: wrap;
+                gap: 18px;
+            }
+
+            .nav-links {
+                gap: 13px;
+                flex-wrap: wrap;
+            }
+
+            .hero {
+                padding: 60px 6%;
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .hero-card {
+                width: 100%;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .features {
+                padding: 55px 6%;
+            }
+
+            .cta {
+                margin: 40px 6%;
+            }
+        }
+
+        @media (max-width: 450px) {
+            .nav-links a {
+                font-size: 12px;
+            }
+
+            .nav-links .nav-button {
+                padding: 10px 12px;
+            }
+
+            h1 {
+                font-size: 38px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <a href="index.html" class="logo">💜 MediMate AI</a>
+
+        <div class="nav-links">
+            <a href="#features">Features</a>
+            <a href="index.html">Home</a>
+            <a href="login.html">Login</a>
+            <a href="register.html" class="nav-button">Get Started ↗</a>
+        </div>
+    </nav>
+
+    <main>
+        <section class="hero">
+            <div class="hero-content">
+                <div class="tag">✦ YOUR PERSONAL HEALTH COPILOT</div>
+
+                <h1>
+                    Take control of your health,
+                    <span>one day at a time.</span>
+                </h1>
+
+                <p>
+                    Manage your medicines, track your daily water intake,
+                    organize medical reports, and keep your health information
+                    in one convenient place with MediMate AI.
+                </p>
+
+                <div class="buttons">
+                    <a href="register.html" class="btn btn-primary">
+                        Get Started Free →
+                    </a>
+
+                    <a href="#features" class="btn btn-secondary">
+                        Explore Features
+                    </a>
+                </div>
+            </div>
+
+            <div class="hero-card">
+                <div class="health-icon">💜</div>
+
+                <h2>Your Health, Organized</h2>
+
+                <p>
+                    Simple tools to help you stay organized with your
+                    everyday health routine.
+                </p>
+
+                <div class="feature-row">
+                    <span class="emoji">💧</span>
+                    <div>
+                        <strong>Water Tracker</strong>
+                        <small>Track your daily hydration</small>
+                    </div>
+                </div>
+
+                <div class="feature-row">
+                    <span class="emoji">💊</span>
+                    <div>
+                        <strong>Medicine Reminders</strong>
+                        <small>Keep track of your schedule</small>
+                    </div>
+                </div>
+
+                <div class="feature-row">
+                    <span class="emoji">📋</span>
+                    <div>
+                        <strong>Medical Records</strong>
+                        <small>Organize your report details</small>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="features" id="features">
+            <span class="section-label">WHAT YOU CAN DO</span>
+
+            <h2>Everything in one place</h2>
+
+            <p class="section-description">
+                Stay organized with tools designed to support your daily
+                health management.
+            </p>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <span class="emoji">💧</span>
+                    <h3>Daily Water Tracker</h3>
+                    <p>
+                        Record your water intake and monitor your progress
+                        throughout the day.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <span class="emoji">💊</span>
+                    <h3>Medicine Manager</h3>
+                    <p>
+                        Save medicine names, dosages, and reminder times
+                        to organize your schedule.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <span class="emoji">📄</span>
+                    <h3>Medical Records</h3>
+                    <p>
+                        Keep track of report titles, categories, and dates
+                        in one convenient dashboard.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <span class="emoji">🤖</span>
+                    <h3>AI Health Assistant</h3>
+                    <p>
+                        Explore general health information and prepare
+                        questions to discuss with a healthcare professional.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <span class="emoji">📊</span>
+                    <h3>Health Dashboard</h3>
+                    <p>
+                        View your health activity and access your tracking
+                        tools from one dashboard.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <span class="emoji">🔔</span>
+                    <h3>Helpful Reminders</h3>
+                    <p>
+                        Use available browser reminders to help maintain
+                        your daily routine while the app is open.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="cta">
+            <h2>Your health journey starts here.</h2>
+
+            <p>
+                Create your account and organize your daily health routine
+                with MediMate AI.
+            </p>
+
+            <a href="register.html" class="btn">
+                Create Your Account →
+            </a>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2026 MediMate AI. Personal Health Copilot.</p>
+        <p style="margin-top: 8px;">
+            For general wellness organization only. Not a substitute
+            for professional medical advice.
+        </p>
+    </footer>
+
+</body>
+</html>
+

@@ -1,0 +1,403 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Water Tracker | MediMate AI</title>
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        .water-page {
+            max-width: 1000px;
+            margin: 35px auto;
+            padding: 0 22px;
+        }
+
+        .page-heading {
+            margin-bottom: 25px;
+        }
+
+        .page-heading h1 {
+            font-size: 29px;
+            margin-bottom: 8px;
+        }
+
+        .page-heading p {
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .water-grid {
+            display: grid;
+            grid-template-columns: 1.1fr 1fr;
+            gap: 22px;
+        }
+
+        .water-card {
+            padding: 27px;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            margin-bottom: 22px;
+        }
+
+        .water-card h2 {
+            font-size: 17px;
+            margin-bottom: 18px;
+        }
+
+        .water-circle {
+            width: 175px;
+            height: 175px;
+            border-radius: 50%;
+            border: 10px solid #EAE2FC;
+            border-top-color: var(--purple);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 15px auto 22px;
+            background: #FAF8FF;
+        }
+
+        .water-circle strong {
+            font-size: 30px;
+            color: var(--purple);
+        }
+
+        .water-circle span {
+            color: var(--muted);
+            font-size: 12px;
+            margin-top: 4px;
+        }
+
+        .water-target {
+            text-align: center;
+            color: var(--muted);
+            font-size: 13px;
+            margin-bottom: 20px;
+        }
+
+        .water-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .water-btn {
+            border: none;
+            border-radius: 9px;
+            padding: 12px 17px;
+            background: var(--purple);
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .water-btn:hover {
+            background: var(--purple-dark);
+        }
+
+        .water-btn.secondary {
+            background: var(--purple-light);
+            color: var(--purple);
+        }
+
+        .water-btn:disabled {
+            opacity: .5;
+            cursor: not-allowed;
+        }
+
+        .progress-track {
+            height: 10px;
+            background: #EEEAF5;
+            border-radius: 20px;
+            overflow: hidden;
+            margin: 13px 0;
+        }
+
+        .progress-fill {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #9A79EA, #7043D3);
+            transition: width .3s;
+        }
+
+        .water-message {
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        .history-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 13px 0;
+            border-bottom: 1px solid #F0EDF5;
+            font-size: 13px;
+        }
+
+        .history-row:last-child {
+            border-bottom: none;
+        }
+
+        .history-row span {
+            color: var(--muted);
+        }
+
+        .reminder-box {
+            background: #F7F3FF;
+            border: 1px solid #E9DFFF;
+            border-radius: 12px;
+            padding: 17px;
+        }
+
+        .reminder-box label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .reminder-box input {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #DCD2EF;
+            border-radius: 8px;
+            margin-bottom: 13px;
+            background: white;
+        }
+
+        .reminder-box small {
+            display: block;
+            color: var(--muted);
+            line-height: 1.6;
+            margin-top: 10px;
+        }
+
+        .reminder-status {
+            color: var(--purple);
+            font-size: 12px;
+            margin-top: 12px;
+        }
+
+        @media(max-width: 700px) {
+            .water-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .water-card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<nav class="navbar">
+    <a href="dashboard.html" class="logo">
+        <span class="logo-icon">✚</span>
+        MediMate <span class="ai-text">AI</span>
+    </a>
+    <div class="nav-links">
+        <a href="dashboard.html">Dashboard</a>
+        <a href="index.html">Sign Out</a>
+    </div>
+</nav>
+
+<main class="water-page">
+
+    <div class="page-heading">
+        <h1>💧 Water Tracker</h1>
+        <p>Track your daily water intake and build a consistent hydration routine.</p>
+    </div>
+
+    <div class="water-grid">
+
+        <section class="water-card">
+            <h2>Today's Progress</h2>
+
+            <div class="water-circle">
+                <strong id="totalWater">0</strong>
+                <span>ml consumed</span>
+            </div>
+
+            <p class="water-target">
+                Daily tracking goal: <strong id="goalText">2000 ml</strong>
+            </p>
+
+            <div class="progress-track">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+
+            <p class="water-message" id="progressMessage">
+                Start by recording a glass of water.
+            </p>
+
+            <br>
+
+            <div class="water-buttons">
+                <button class="water-btn" id="addGlass">+ Add 250 ml</button>
+                <button class="water-btn secondary" id="removeGlass">Undo 250 ml</button>
+            </div>
+        </section>
+
+        <div>
+            <section class="water-card">
+                <h2>📊 Intake Summary</h2>
+
+                <div class="history-row">
+                    <span>Glasses recorded</span>
+                    <strong id="glassCount">0</strong>
+                </div>
+
+                <div class="history-row">
+                    <span>Remaining to goal</span>
+                    <strong id="remainingWater">2000 ml</strong>
+                </div>
+
+                <div class="history-row">
+                    <span>Today's date</span>
+                    <strong id="currentDate">--</strong>
+                </div>
+            </section>
+
+            <section class="water-card">
+                <h2>⏰ Water Reminder</h2>
+
+                <div class="reminder-box">
+                    <label for="reminderMinutes">Remind me every (minutes)</label>
+
+                    <input
+                        type="number"
+                        id="reminderMinutes"
+                        min="15"
+                        max="240"
+                        value="60"
+                    >
+
+                    <button class="water-btn" id="startReminder">
+                        Enable Reminder
+                    </button>
+
+                    <button class="water-btn secondary" id="stopReminder">
+                        Stop
+                    </button>
+
+                    <p class="reminder-status" id="reminderStatus">
+                        Reminder is off.
+                    </p>
+
+                    <small>
+                        Reminder alerts work while this page remains open.
+                        Choose an interval that suits your routine.
+                    </small>
+                </div>
+            </section>
+        </div>
+
+    </div>
+
+    <p class="water-message">
+        Note: 2000 ml is only a sample tracking goal, not a medical requirement
+        for everyone. Your fluid needs can vary.
+    </p>
+
+</main>
+
+<script>
+    const totalWater = document.getElementById("totalWater");
+    const glassCount = document.getElementById("glassCount");
+    const remainingWater = document.getElementById("remainingWater");
+    const progressFill = document.getElementById("progressFill");
+    const progressMessage = document.getElementById("progressMessage");
+    const goal = 2000;
+
+    let consumed = 0;
+    let reminderTimer = null;
+
+    function updateWater() {
+        totalWater.textContent = consumed;
+        glassCount.textContent = consumed / 250;
+        remainingWater.textContent = Math.max(0, goal - consumed) + " ml";
+
+        const percentage = Math.min((consumed / goal) * 100, 100);
+        progressFill.style.width = percentage + "%";
+
+        if (consumed === 0) {
+            progressMessage.textContent = "Start by recording a glass of water.";
+        } else if (consumed < goal) {
+            progressMessage.textContent =
+                percentage.toFixed(0) + "% of your sample daily goal recorded.";
+        } else {
+            progressMessage.textContent =
+                "Your sample tracking goal is complete!";
+        }
+
+        localStorage.setItem("medimateWater", consumed);
+        localStorage.setItem("medimateWaterDate", new Date().toDateString());
+    }
+
+    const savedDate = localStorage.getItem("medimateWaterDate");
+    if (savedDate === new Date().toDateString()) {
+        consumed = Number(localStorage.getItem("medimateWater")) || 0;
+    }
+
+    document.getElementById("addGlass").addEventListener("click", function () {
+        consumed += 250;
+        updateWater();
+    });
+
+    document.getElementById("removeGlass").addEventListener("click", function () {
+        consumed = Math.max(0, consumed - 250);
+        updateWater();
+    });
+
+    document.getElementById("currentDate").textContent =
+        new Date().toLocaleDateString();
+
+    document.getElementById("addGlass").addEventListener("click", function () {
+        localStorage.setItem("medimateWater", consumed);
+    });
+
+    document.getElementById("startReminder").addEventListener("click", function () {
+        const minutes = Number(
+            document.getElementById("reminderMinutes").value
+        );
+
+        if (!Number.isFinite(minutes) || minutes < 15 || minutes > 240) {
+            document.getElementById("reminderStatus").textContent =
+                "Enter an interval from 15 to 240 minutes.";
+            return;
+        }
+
+        if (reminderTimer) {
+            clearInterval(reminderTimer);
+        }
+
+        reminderTimer = setInterval(function () {
+            alert("💧 MediMate AI: If you are thirsty, take a water break!");
+        }, minutes * 60 * 1000);
+
+        document.getElementById("reminderStatus").textContent =
+            "Reminder enabled: every " + minutes + " minutes while this page is open.";
+    });
+
+    document.getElementById("stopReminder").addEventListener("click", function () {
+        if (reminderTimer) {
+            clearInterval(reminderTimer);
+            reminderTimer = null;
+        }
+
+        document.getElementById("reminderStatus").textContent =
+            "Reminder is off.";
+    });
+
+    updateWater();
+</script>
+
+</body>
+</html>

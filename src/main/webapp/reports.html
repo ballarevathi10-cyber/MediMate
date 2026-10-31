@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical Records | MediMate AI</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        .reports-page {
+            max-width: 1050px;
+            margin: 35px auto;
+            padding: 0 22px;
+        }
+
+        .page-heading { margin-bottom: 25px; }
+
+        .page-heading h1 {
+            font-size: 29px;
+            margin-bottom: 8px;
+        }
+
+        .page-heading p {
+            font-size: 14px;
+            color: var(--muted);
+        }
+
+        .reports-grid {
+            display: grid;
+            grid-template-columns: 0.9fr 1.1fr;
+            gap: 22px;
+        }
+
+        .report-card {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            padding: 24px;
+            margin-bottom: 22px;
+        }
+
+        .report-card h2 {
+            font-size: 17px;
+            margin-bottom: 18px;
+        }
+
+        .form-group { margin-bottom: 16px; }
+
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 7px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 11px 12px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font: inherit;
+            font-size: 13px;
+            background: white;
+            box-sizing: border-box;
+        }
+
+        .upload-area {
+            border: 2px dashed #cdbdf0;
+            background: #faf8ff;
+            border-radius: 12px;
+            padding: 25px 15px;
+            text-align: center;
+            margin-bottom: 18px;
+        }
+
+        .upload-area .upload-icon {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+
+        .upload-area h3 {
+            font-size: 14px;
+            margin-bottom: 7px;
+        }
+
+        .upload-area p {
+            font-size: 11px;
+            color: var(--muted);
+            line-height: 1.6;
+        }
+
+        .upload-area input {
+            width: 100%;
+            margin-top: 15px;
+            font-size: 12px;
+        }
+
+        .primary-btn {
+            width: 100%;
+            border: 0;
+            border-radius: 9px;
+            padding: 12px;
+            background: var(--purple);
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .primary-btn:hover {
+            background: var(--purple-dark);
+        }
+
+        .form-message {
+            font-size: 12px;
+            margin-top: 12px;
+            color: var(--purple);
+        }
+
+        .report-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px 0;
+            border-bottom: 1px solid #f0edf5;
+        }
+
+        .file-icon {
+            width: 43px;
+            height: 43px;
+            flex-shrink: 0;
+            display: grid;
+            place-items: center;
+            border-radius: 10px;
+            background: var(--purple-light);
+            font-size: 21px;
+        }
+
+        .report-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .report-info h3 {
+            font-size: 13px;
+            overflow-wrap: anywhere;
+        }
+
+        .report-info p {
+            color: var(--muted);
+            font-size: 11px;
+            margin-top: 5px;
+        }
+
+        .delete-btn {
+            border: 1px solid #f0d5d5;
+            background: white;
+            color: #b43c3c;
+            padding: 7px 9px;
+            border-radius: 7px;
+            font-size: 11px;
+            cursor: pointer;
+        }
+
+        .empty-state {
+            padding: 28px 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .privacy-note {
+            background: #f7f3ff;
+            border: 1px solid #e9dfff;
+            color: #5d4c7d;
+            padding: 16px;
+            border-radius: 11px;
+            font-size: 12px;
+            line-height: 1.7;
+        }
+
+        @media (max-width: 750px) {
+            .reports-grid { grid-template-columns: 1fr; }
+            .report-card { padding: 18px; }
+        }
+    </style>
+</head>
+
+<body>
+
+<nav class="navbar">
+    <a href="dashboard.html" class="logo">
+        <span class="logo-icon">✚</span>
+        MediMate <span class="ai-text">AI</span>
+    </a>
+
+    <div class="nav-links">
+        <a href="dashboard.html">Dashboard</a>
+        <a href="LogoutServlet">Sign Out</a>
+    </div>
+</nav>
+
+<main class="reports-page">
+
+    <header class="page-heading">
+        <h1>📂 Medical Records</h1>
+        <p>Keep your health documents organized in one place.</p>
+    </header>
+
+    <div class="reports-grid">
+
+        <section class="report-card">
+            <h2>＋ Add a Medical Record</h2>
+
+            <form id="reportForm"
+                  action="ReportServlet"
+                  method="post"
+                  enctype="multipart/form-data">
+
+                <div class="form-group">
+                    <label for="reportTitle">Report Name *</label>
+                    <input
+                        type="text"
+                        id="reportTitle"
+                        name="title"
+                        maxlength="100"
+                        placeholder="e.g. Blood Test Report"
+                        required>
+                </div>
+
+                <div class="form-group">
+                    <label for="reportType">Report Category *</label>
+
+                    <select id="reportType" name="category" required>
+                        <option value="">Choose category</option>
+                        <option value="Blood Test">Blood Test</option>
+                        <option value="Scan / Imaging">Scan / Imaging</option>
+                        <option value="Prescription">Prescription</option>
+                        <option value="Discharge Summary">Discharge Summary</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="reportDate">Report Date</label>
+                    <input
+                        type="date"
+                        id="reportDate"
+                        name="report_date">
+                </div>
+
+                <div class="upload-area">
+                    <div class="upload-icon">📄</div>
+                    <h3>Select your report file</h3>
+                    <p>PDF, JPG or PNG · Maximum 5 MB</p>
+
+                    <input
+                        type="file"
+                        id="reportFile"
+                        name="report_file"
+                        accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png"
+                        required>
+                </div>
+
+                <button class="primary-btn" type="submit">
+                    Save Medical Record
+                </button>
+
+                <p class="form-message" id="reportMessage" role="status"></p>
+            </form>
+        </section>
+
+        <div>
+            <section class="report-card">
+                <h2>📋 Saved Medical Records</h2>
+
+                <div id="reportList">
+                    <div class="empty-state">
+                        Records saved in your browser will appear here.
+                    </div>
+                </div>
+            </section>
+
+            <div class="privacy-note">
+                <strong>🔒 Privacy note</strong><br>
+                Medical reports contain sensitive information.
+                This form submits files to the server. Upload only test
+                documents until secure server-side storage and access
+                controls have been implemented.
+            </div>
+        </div>
+
+    </div>
+</main>
+
+<script>
+    const form = document.getElementById("reportForm");
+    const fileInput = document.getElementById("reportFile");
+    const reportMessage = document.getElementById("reportMessage");
+    const reportList = document.getElementById("reportList");
+
+    // Display previously saved browser records.
+    let reports = [];
+
+    try {
+        reports = JSON.parse(
+            localStorage.getItem("medimateReports") || "[]"
+        );
+
+        if (!Array.isArray(reports)) {
+            reports = [];
+        }
+    } catch (error) {
+        reports = [];
+    }
+
+    function renderReports() {
+        reportList.replaceChildren();
+
+        if (reports.length === 0) {
+            const empty = document.createElement("div");
+            empty.className = "empty-state";
+            empty.textContent = "No browser records saved yet.";
+            reportList.appendChild(empty);
+            return;
+        }
+
+        reports.forEach(function(report) {
+            const item = document.createElement("div");
+            item.className = "report-item";
+
+            const icon = document.createElement("div");
+            icon.className = "file-icon";
+            icon.textContent = report.type === "PDF" ? "📕" : "🖼️";
+
+            const info = document.createElement("div");
+            info.className = "report-info";
+
+            const title = document.createElement("h3");
+            title.textContent = report.title;
+
+            const details = document.createElement("p");
+            details.textContent =
+                report.category + " · " + report.date;
+
+            info.appendChild(title);
+            info.appendChild(details);
+
+            const remove = document.createElement("button");
+            remove.className = "delete-btn";
+            remove.type = "button";
+            remove.textContent = "Delete";
+
+            remove.addEventListener("click", function() {
+                reports = reports.filter(function(entry) {
+                    return entry.id !== report.id;
+                });
+
+                localStorage.setItem(
+                    "medimateReports",
+                    JSON.stringify(reports)
+                );
+
+                renderReports();
+            });
+
+            item.appendChild(icon);
+            item.appendChild(info);
+            item.appendChild(remove);
+
+            reportList.appendChild(item);
+        });
+    }
+
+    form.addEventListener("submit", function(event) {
+        const file = fileInput.files[0];
+
+        if (!file) {
+            event.preventDefault();
+            reportMessage.textContent = "Please select a report file.";
+            return;
+        }
+
+        const allowedTypes = [
+            "application/pdf",
+            "image/jpeg",
+            "image/png"
+        ];
+
+        if (!allowedTypes.includes(file.type)) {
+            event.preventDefault();
+            reportMessage.textContent =
+                "Choose a PDF, JPG or PNG file.";
+            return;
+        }
+
+        if (file.size > 5 * 1024 * 1024) {
+            event.preventDefault();
+            reportMessage.textContent =
+                "File must be 5 MB or smaller.";
+            return;
+        }
+
+        // Do not call preventDefault here.
+        // Valid submissions go to ReportServlet.
+    });
+
+    renderReports();
+</script>
+
+</body>
+</html>

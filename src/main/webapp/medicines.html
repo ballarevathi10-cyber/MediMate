@@ -1,0 +1,460 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medicine Reminders | MediMate AI</title>
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        .medicine-page {
+            max-width: 1000px;
+            margin: 35px auto;
+            padding: 0 22px;
+        }
+
+        .page-heading {
+            margin-bottom: 25px;
+        }
+
+        .page-heading h1 {
+            font-size: 29px;
+            margin-bottom: 8px;
+        }
+
+        .page-heading p {
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .medicine-grid {
+            display: grid;
+            grid-template-columns: 0.9fr 1.1fr;
+            gap: 22px;
+        }
+
+        .medicine-card {
+            background: #FFFFFF;
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            padding: 24px;
+            margin-bottom: 22px;
+        }
+
+        .medicine-card h2 {
+            font-size: 17px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 7px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 11px 12px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: #FFFFFF;
+            font: inherit;
+            font-size: 13px;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: 2px solid #E2D6FF;
+            border-color: var(--purple);
+        }
+
+        .form-note {
+            color: var(--muted);
+            font-size: 11px;
+            line-height: 1.6;
+            margin-top: 13px;
+        }
+
+        .medicine-submit {
+            width: 100%;
+            border: none;
+            border-radius: 9px;
+            padding: 12px;
+            background: var(--purple);
+            color: white;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .medicine-submit:hover {
+            background: var(--purple-dark);
+        }
+
+        .medicine-item {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            padding: 16px 0;
+            border-bottom: 1px solid #F0EDF5;
+        }
+
+        .medicine-item:last-child {
+            border-bottom: none;
+        }
+
+        .medicine-icon {
+            width: 44px;
+            height: 44px;
+            flex-shrink: 0;
+            display: grid;
+            place-items: center;
+            background: var(--purple-light);
+            border-radius: 12px;
+            font-size: 21px;
+        }
+
+        .medicine-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .medicine-info h3 {
+            font-size: 13px;
+            overflow-wrap: anywhere;
+        }
+
+        .medicine-info p {
+            color: var(--muted);
+            font-size: 11px;
+            margin-top: 5px;
+        }
+
+        .medicine-time {
+            color: var(--purple);
+            background: var(--purple-light);
+            padding: 6px 9px;
+            border-radius: 7px;
+            font-size: 11px;
+            white-space: nowrap;
+        }
+
+        .delete-btn {
+            border: 1px solid #F0D5D5;
+            background: #FFF5F5;
+            color: #B43C3C;
+            border-radius: 7px;
+            padding: 7px 9px;
+            cursor: pointer;
+            font-size: 11px;
+        }
+
+        .empty-state {
+            padding: 28px 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .message {
+            margin-top: 12px;
+            font-size: 12px;
+            color: var(--purple);
+        }
+
+        .privacy-note {
+            background: #F7F3FF;
+            border: 1px solid #E9DFFF;
+            border-radius: 11px;
+            padding: 16px;
+            font-size: 12px;
+            line-height: 1.7;
+            color: #5D4C7D;
+        }
+
+        @media(max-width: 700px) {
+            .medicine-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .medicine-card {
+                padding: 18px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<nav class="navbar">
+    <a href="dashboard.html" class="logo">
+        <span class="logo-icon">✚</span>
+        MediMate <span class="ai-text">AI</span>
+    </a>
+    <div class="nav-links">
+        <a href="dashboard.html">Dashboard</a>
+        <a href="index.html">Sign Out</a>
+    </div>
+</nav>
+
+<main class="medicine-page">
+
+    <header class="page-heading">
+        <h1>💊 Medicine Reminders</h1>
+        <p>Organize your prescribed medicine schedule in one place.</p>
+    </header>
+
+    <div class="medicine-grid">
+
+        <section class="medicine-card">
+            <h2>＋ Add Medicine Schedule</h2>
+<!-- Existing medicine form ni ee form tho replace cheyyi -->
+<form id="medicineForm"
+      action="MedicineServlet"
+      method="post">
+
+    <label for="medicineName">Medicine Name</label>
+    <input type="text"
+           id="medicineName"
+           name="medicine_name"
+           placeholder="Enter medicine name"
+           required>
+
+    <label for="medicineDose">Dosage</label>
+    <input type="text"
+           id="medicineDose"
+           name="dosage"
+           placeholder="e.g. 1 tablet">
+
+    <label for="medicineTime">Reminder Time</label>
+    <input type="time"
+           id="medicineTime"
+           name="reminder_time"
+           required>
+
+    <label for="medicineNotes">Notes</label>
+    <textarea id="medicineNotes"
+              name="notes"
+              placeholder="Additional notes"></textarea>
+
+    <button type="submit" class="medicine-submit">
+        + Save Reminder
+    </button>
+</form>
+            <p class="form-note">
+                Enter details exactly as prescribed by your doctor.
+                This tracker does not recommend or change medicines or doses.
+            </p>
+        </section>
+
+        <div>
+            <section class="medicine-card">
+                <h2>📋 Your Saved Schedule</h2>
+
+                <div id="medicineList">
+                    <div class="empty-state">
+                        No medicine reminders saved yet.
+                    </div>
+                </div>
+            </section>
+
+            <section class="medicine-card">
+                <h2>⏰ Reminder Settings</h2>
+
+                <div class="form-group">
+                    <label for="reminderPermission">
+                        Browser Notifications
+                    </label>
+                    <button
+                        type="button"
+                        class="medicine-submit"
+                        id="enableNotifications">
+                        Enable Notifications
+                    </button>
+                    <p class="message" id="notificationMessage" role="status">
+                        Notifications depend on browser permission and settings.
+                    </p>
+                </div>
+
+                <p class="form-note">
+                    Keep this page open for basic in-page reminder checks.
+                    Browser notifications are not guaranteed if the browser
+                    is closed, the device sleeps, or permissions are blocked.
+                </p>
+            </section>
+
+            <div class="privacy-note">
+                <strong>💜 Your health matters</strong><br>
+                MediMate AI helps organize your schedule. Follow your
+                prescription and consult your healthcare professional
+                if you have questions about a medicine.
+            </div>
+        </div>
+
+    </div>
+</main>
+
+<script>
+    const form = document.getElementById("medicineForm");
+    const list = document.getElementById("medicineList");
+    const formMessage = document.getElementById("formMessage");
+
+    let medicines = [];
+    let notifiedToday = {};
+
+    try {
+        medicines = JSON.parse(localStorage.getItem("medimateMedicines") || "[]");
+        if (!Array.isArray(medicines)) medicines = [];
+    } catch (error) {
+        medicines = [];
+    }
+
+    function saveMedicines() {
+        localStorage.setItem("medimateMedicines", JSON.stringify(medicines));
+        renderMedicines();
+    }
+
+    function renderMedicines() {
+        list.replaceChildren();
+
+        if (medicines.length === 0) {
+            const empty = document.createElement("div");
+            empty.className = "empty-state";
+            empty.textContent = "No medicine reminders saved yet.";
+            list.appendChild(empty);
+        }
+
+        medicines.forEach(function (medicine) {
+            const item = document.createElement("div");
+            item.className = "medicine-item";
+
+            const icon = document.createElement("div");
+            icon.className = "medicine-icon";
+            icon.textContent = "💊";
+
+            const info = document.createElement("div");
+            info.className = "medicine-info";
+
+            const name = document.createElement("h3");
+            name.textContent = medicine.name;
+
+            const details = document.createElement("p");
+            details.textContent =
+                [medicine.dose, medicine.notes].filter(Boolean).join(" · ") ||
+                "No extra instructions added";
+
+            const time = document.createElement("span");
+            time.className = "medicine-time";
+            time.textContent = medicine.time;
+
+            const remove = document.createElement("button");
+            remove.type = "button";
+            remove.className = "delete-btn";
+            remove.textContent = "Delete";
+
+            remove.addEventListener("click", function () {
+                medicines = medicines.filter(function (entry) {
+                    return entry.id !== medicine.id;
+                });
+                saveMedicines();
+            });
+
+            info.appendChild(name);
+            info.appendChild(details);
+
+            item.appendChild(icon);
+            item.appendChild(info);
+            item.appendChild(time);
+            item.appendChild(remove);
+
+            list.appendChild(item);
+        });
+
+        localStorage.setItem("medimateMedicineCount", medicines.length);
+    }
+
+    form.addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        const name = document.getElementById("medicineName").value.trim();
+        const dose = document.getElementById("medicineDose").value.trim();
+        const time = document.getElementById("medicineTime").value;
+        const notes = document.getElementById("medicineNotes").value.trim();
+
+        if (!name || !time) {
+            formMessage.textContent = "Please enter medicine name and time.";
+            return;
+        }
+
+        medicines.push({
+            id: Date.now().toString() + Math.random().toString(16).slice(2),
+            name: name,
+            dose: dose,
+            time: time,
+            notes: notes
+        });
+
+        saveMedicines();
+        form.reset();
+        formMessage.textContent = "Reminder saved successfully!";
+    });
+
+    document.getElementById("enableNotifications").addEventListener("click", async function () {
+        const message = document.getElementById("notificationMessage");
+
+        if (!("Notification" in window)) {
+            message.textContent = "This browser does not support notifications.";
+            return;
+        }
+
+        try {
+            const permission = await Notification.requestPermission();
+            message.textContent = permission === "granted"
+                ? "Notifications allowed. Keep this page open for reminder checks."
+                : "Notification permission was not granted.";
+        } catch (error) {
+            message.textContent = "Could not enable browser notifications.";
+        }
+    });
+
+    function checkMedicineReminders() {
+        const now = new Date();
+        const currentTime = String(now.getHours()).padStart(2, "0") +
+            ":" + String(now.getMinutes()).padStart(2, "0");
+        const today = now.toDateString();
+
+        medicines.forEach(function (medicine) {
+            const key = today + "_" + medicine.id;
+
+            if (medicine.time === currentTime && !notifiedToday[key]) {
+                notifiedToday[key] = true;
+
+                if ("Notification" in window &&
+                    Notification.permission === "granted") {
+                    new Notification("MediMate AI Reminder", {
+                        body: "Check your prescribed schedule: " + medicine.name
+                    });
+                } else {
+                    alert("MediMate AI reminder: Check your prescribed schedule for " +
+                        medicine.name);
+                }
+            }
+        });
+    }
+
+    renderMedicines();
+    setInterval(checkMedicineReminders, 30000);
+</script>
+<script src="js/reminders.js"></script>
+
+</body>
+</html>

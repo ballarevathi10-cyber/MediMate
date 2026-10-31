@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | MediMate AI</title>
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        .dashboard-layout {
+            display: flex;
+            min-height: 85vh;
+        }
+
+        .sidebar {
+            width: 235px;
+            flex-shrink: 0;
+            padding: 25px 17px;
+            border-right: 1px solid var(--border);
+            background: #FFFFFF;
+        }
+
+        .sidebar-label {
+            margin: 20px 10px 10px;
+            color: var(--muted);
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .side-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            margin: 4px 0;
+            border-radius: 9px;
+            color: var(--muted);
+            font-size: 13px;
+            font-weight: 500;
+            text-decoration: none;
+        }
+
+        .side-link:hover,
+        .side-link.active {
+            color: var(--purple);
+            background: var(--purple-light);
+        }
+
+        .dashboard-main {
+            flex: 1;
+            min-width: 0;
+            padding: 30px;
+            background: #FAF9FD;
+        }
+
+        .dash-topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 28px;
+        }
+
+        .dash-topbar h1 {
+            font-size: 27px;
+            letter-spacing: -0.8px;
+        }
+
+        .dash-topbar p {
+            font-size: 13px;
+            color: var(--muted);
+            margin-top: 4px;
+        }
+
+        .date-chip {
+            padding: 9px 13px;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            background: #FFFFFF;
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        .welcome-banner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            padding: 26px;
+            margin-bottom: 25px;
+            border-radius: 16px;
+            background: linear-gradient(110deg, #7546D8, #9671E9);
+            color: #FFFFFF;
+        }
+
+        .welcome-banner h2 {
+            font-size: 23px;
+            margin-bottom: 7px;
+        }
+
+        .welcome-banner p {
+            max-width: 470px;
+            color: #F1EAFE;
+            font-size: 13px;
+        }
+
+        .welcome-symbol {
+            font-size: 45px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 17px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            padding: 20px;
+            border: 1px solid var(--border);
+            border-radius: 13px;
+            background: #FFFFFF;
+        }
+
+        .stat-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .stat-icon {
+            width: 39px;
+            height: 39px;
+            display: grid;
+            place-items: center;
+            border-radius: 11px;
+            background: var(--purple-light);
+            font-size: 20px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        .stat-card h3 {
+            font-size: 26px;
+            margin-bottom: 4px;
+        }
+
+        .stat-card small {
+            font-size: 11px;
+            color: var(--muted);
+        }
+
+        .dash-columns {
+            display: grid;
+            grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+            gap: 20px;
+        }
+
+        .panel {
+            padding: 22px;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            background: #FFFFFF;
+            margin-bottom: 20px;
+        }
+
+        .panel-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 19px;
+        }
+
+        .panel-heading h3 {
+            font-size: 16px;
+        }
+
+        .panel-heading a {
+            color: var(--purple);
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .water-summary {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            padding: 16px;
+            border-radius: 12px;
+            background: #F3F8FF;
+        }
+
+        .water-emoji {
+            font-size: 39px;
+        }
+
+        .water-summary h2 {
+            font-size: 24px;
+            color: #3B70C4;
+        }
+
+        .water-summary p {
+            font-size: 11px;
+            color: var(--muted);
+        }
+
+        .water-progress {
+            height: 8px;
+            border-radius: 10px;
+            background: #DCE9FA;
+            margin: 17px 0;
+            overflow: hidden;
+        }
+
+        .water-progress-fill {
+            width: 0%;
+            height: 100%;
+            background: #5796EA;
+            border-radius: 10px;
+            transition: width .3s;
+        }
+
+        .water-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .small-button {
+            padding: 9px 13px;
+            border: 1px solid #D9CCF8;
+            border-radius: 8px;
+            color: var(--purple);
+            background: #FFFFFF;
+            cursor: pointer;
+            font: inherit;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .small-button:hover {
+            background: var(--purple-light);
+        }
+
+        .medicine-item,
+        .report-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 13px 0;
+            border-bottom: 1px solid #F0EDF5;
+        }
+
+        .medicine-item:last-child,
+        .report-item:last-child {
+            border-bottom: none;
+        }
+
+        .item-icon {
+            width: 39px;
+            height: 39px;
+            flex-shrink: 0;
+            display: grid;
+            place-items: center;
+            border-radius: 10px;
+            background: var(--purple-light);
+            font-size: 19px;
+        }
+
+        .item-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .item-info h4 {
+            font-size: 12px;
+        }
+
+        .item-info p {
+            color: var(--muted);
+            font-size: 10px;
+            margin-top: 3px;
+        }
+
+        .item-status {
+            padding: 5px 8px;
+            border-radius: 6px;
+            background: #FFF4DD;
+            color: #946200;
+            font-size: 10px;
+            white-space: nowrap;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 18px 8px;
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .quick-links {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .quick-link {
+            padding: 17px 10px;
+            text-align: center;
+            border: 1px solid var(--border);
+            border-radius: 11px;
+            background: #FFFFFF;
+            font-size: 12px;
+            font-weight: 600;
+            transition: .2s;
+        }
+
+        .quick-link:hover {
+            border-color: #C7B5F1;
+            background: var(--purple-light);
+        }
+
+        .quick-link span {
+            display: block;
+            font-size: 23px;
+            margin-bottom: 7px;
+        }
+
+        .dash-note {
+            font-size: 10px;
+            color: var(--muted);
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        .signout-link {
+            color: #B42318 !important;
+        }
+
+        @media(max-width: 1000px) {
+            .sidebar {
+                width: 190px;
+            }
+
+            .dashboard-main {
+                padding: 22px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media(max-width: 700px) {
+            .dashboard-layout {
+                display: block;
+            }
+
+            .sidebar {
+                width: 100%;
+                padding: 10px;
+                display: flex;
+                overflow-x: auto;
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+            }
+
+            .sidebar-label {
+                display: none;
+            }
+
+            .side-link {
+                white-space: nowrap;
+            }
+
+            .dashboard-main {
+                padding: 17px;
+            }
+
+            .dash-columns {
+                grid-template-columns: 1fr;
+            }
+
+            .welcome-banner h2 {
+                font-size: 19px;
+            }
+
+            .welcome-symbol {
+                font-size: 32px;
+            }
+
+            .quick-links {
+                grid-template-columns: 1fr;
+            }
+
+            .date-chip {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <a href="dashboard.html" class="logo">
+            <span class="logo-icon">✚</span>
+            MediMate <span class="ai-text">AI</span>
+        </a>
+
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="LogoutServlet" class="signout-link">Sign Out</a>
+        </div>
+    </nav>
+
+    <div class="dashboard-layout">
+
+        <aside class="sidebar">
+            <a href="dashboard.html" class="side-link active">🏠 Dashboard</a>
+            <a href="water.html" class="side-link">💧 Water Tracker</a>
+            <a href="medicines.html" class="side-link">💊 Medicines</a>
+            <a href="reports.html" class="side-link">📂 Medical Records</a>
+            <a href="ai-assistant.html" class="side-link">✨ AI Assistant</a>
+            <a href="LogoutServlet" class="side-link signout-link">🚪 Sign Out</a>
+        </aside>
+
+        <main class="dashboard-main">
+
+            <header class="dash-topbar">
+                <div>
+                    <h1>My Health Dashboard</h1>
+                    <p>Your daily healthcare routine, all in one place.</p>
+                </div>
+                <div class="date-chip" id="todayDate">Today's Overview</div>
+            </header>
+
+            <section class="welcome-banner">
+                <div>
+                    <h2>Welcome to your health space! 💜</h2>
+                    <p>
+                        Keep your water intake, prescribed medicines and
+                        medical records organized from one simple dashboard.
+                    </p>
+                </div>
+                <div class="welcome-symbol">✚</div>
+            </section>
+
+            <section class="stats-grid">
+
+                <article class="stat-card">
+                    <div class="stat-top">
+                        <span class="stat-label">Water Intake Today</span>
+                        <span class="stat-icon">💧</span>
+                    </div>
+                    <h3><span id="waterGlasses">0</span> glasses</h3>
+                    <small id="waterStatText">Start tracking your water</small>
+                </article>
+
+                <article class="stat-card">
+                    <div class="stat-top">
+                        <span class="stat-label">Medicine Schedule</span>
+                        <span class="stat-icon">💊</span>
+                    </div>
+                    <h3 id="medicineCount">0 reminders</h3>
+                    <small>View your saved medicine schedule</small>
+                </article>
+
+                <article class="stat-card">
+                    <div class="stat-top">
+                        <span class="stat-label">Medical Records</span>
+                        <span class="stat-icon">📂</span>
+                    </div>
+                    <h3 id="reportCount">0 reports</h3>
+                    <small>Your organized health documents</small>
+                </article>
+
+            </section>
+
+            <section class="dash-columns">
+
+                <div>
+                    <article class="panel">
+                        <div class="panel-heading">
+                            <h3>💧 Today's Water Tracker</h3>
+                            <a href="water.html">Open Tracker →</a>
+                        </div>
+
+                        <div class="water-summary">
+                            <div class="water-emoji">🥤</div>
+                            <div>
+                                <h2><span id="waterAmount">0</span> ml</h2>
+                                <p>Recorded water intake today</p>
+                            </div>
+                        </div>
+
+                        <div class="water-progress">
+                            <div class="water-progress-fill" id="waterBar"></div>
+                        </div>
+
+                        <div class="water-actions">
+                            <button type="button" class="small-button" id="addWaterBtn">
+                                + Add 250 ml
+                            </button>
+                            <button type="button" class="small-button" id="undoWaterBtn">
+                                Undo last
+                            </button>
+                        </div>
+                    </article>
+
+                    <article class="panel">
+                        <div class="panel-heading">
+                            <h3>📂 Recent Medical Records</h3>
+                            <a href="reports.html">View All →</a>
+                        </div>
+
+                        <div id="recentReports">
+                            <div class="empty-state">
+                                No reports added yet. Upload a report to
+                                start organizing your medical records.
+                            </div>
+                        </div>
+                    </article>
+                </div>
+
+                <div>
+                    <article class="panel">
+                        <div class="panel-heading">
+                            <h3>💊 Medicine Reminders</h3>
+                            <a href="medicines.html">Manage →</a>
+                        </div>
+
+                        <div id="medicineList">
+                            <div class="empty-state">
+                                No medicine schedules added yet.
+                                Add medicines prescribed by your doctor.
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="panel">
+                        <div class="panel-heading">
+                            <h3>Quick Access</h3>
+                        </div>
+
+                        <div class="quick-links">
+                            <a class="quick-link" href="water.html">
+                                <span>💧</span>Water Tracker
+                            </a>
+                            <a class="quick-link" href="medicines.html">
+                                <span>💊</span>Medicines
+                            </a>
+                            <a class="quick-link" href="reports.html">
+                                <span>📄</span>Upload Report
+                            </a>
+                        </div>
+                    </article>
+
+                    <article class="panel">
+                        <div class="panel-heading">
+                            <h3>✨ AI Health Assistant</h3>
+                        </div>
+
+                        <p style="font-size:12px;color:var(--muted);margin-bottom:15px;">
+                            Get simple explanations of health report terms
+                            and keep your health information organized.
+                        </p>
+
+                        <a href="ai-assistant.html" class="primary-button">
+                            Open AI Assistant →
+                        </a>
+                    </article>
+                </div>
+
+            </section>
+
+            <p class="dash-note">
+                MediMate AI helps organize health information. It does not
+                replace professional medical advice.
+            </p>
+
+        </main>
+    </div>
+
+    <script src="js/app.js"></script>
+
+</body>
+</html>

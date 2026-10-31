@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Health Assistant | MediMate AI</title>
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        .assistant-page {
+            max-width: 1000px;
+            margin: 35px auto;
+            padding: 0 22px;
+        }
+
+        .page-heading {
+            margin-bottom: 25px;
+        }
+
+        .page-heading h1 {
+            font-size: 29px;
+            margin-bottom: 8px;
+        }
+
+        .page-heading p {
+            font-size: 14px;
+            color: var(--muted);
+        }
+
+        .assistant-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 22px;
+        }
+
+        .assistant-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            padding: 23px;
+            margin-bottom: 20px;
+        }
+
+        .assistant-card h2 {
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+
+        .assistant-intro {
+            background: linear-gradient(140deg, #7546D8, #9878E9);
+            color: white;
+            border-radius: 14px;
+            padding: 23px;
+            margin-bottom: 22px;
+        }
+
+        .assistant-intro .ai-icon {
+            font-size: 33px;
+            margin-bottom: 12px;
+        }
+
+        .assistant-intro h2 {
+            font-size: 19px;
+            margin-bottom: 9px;
+        }
+
+        .assistant-intro p {
+            font-size: 12px;
+            line-height: 1.8;
+            color: #F1EAFE;
+        }
+
+        .suggestion {
+            width: 100%;
+            text-align: left;
+            padding: 12px;
+            margin: 5px 0;
+            background: #FAF8FF;
+            border: 1px solid #E8DFFC;
+            border-radius: 9px;
+            cursor: pointer;
+            color: #4D3A6F;
+            font-size: 12px;
+        }
+
+        .suggestion:hover {
+            background: var(--purple-light);
+            border-color: #CBB8F4;
+        }
+
+        .chat-box {
+            height: 390px;
+            overflow-y: auto;
+            padding: 17px;
+            background: #FBFAFD;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+        }
+
+        .chat-message {
+            max-width: 90%;
+            padding: 12px 14px;
+            border-radius: 12px;
+            margin-bottom: 13px;
+            font-size: 13px;
+            line-height: 1.7;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+        }
+
+        .bot-message {
+            background: #F0EAFE;
+            color: #49356E;
+            border-bottom-left-radius: 3px;
+        }
+
+        .user-message {
+            background: var(--purple);
+            color: white;
+            margin-left: auto;
+            border-bottom-right-radius: 3px;
+        }
+
+        .chat-form {
+            display: flex;
+            gap: 10px;
+            margin-top: 13px;
+        }
+
+        .chat-form textarea {
+            flex: 1;
+            min-width: 0;
+            resize: vertical;
+            min-height: 48px;
+            max-height: 120px;
+            padding: 13px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            font: inherit;
+            font-size: 13px;
+        }
+
+        .chat-form button {
+            padding: 0 18px;
+            border: none;
+            border-radius: 10px;
+            background: var(--purple);
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .chat-form button:hover {
+            background: var(--purple-dark);
+        }
+
+        .notice {
+            padding: 15px;
+            background: #FFF8E8;
+            border: 1px solid #F3E2B5;
+            color: #795C21;
+            border-radius: 10px;
+            font-size: 11px;
+            line-height: 1.7;
+            margin-top: 15px;
+        }
+
+        .feature-item {
+            display: flex;
+            gap: 11px;
+            align-items: flex-start;
+            margin: 14px 0;
+        }
+
+        .feature-item span {
+            font-size: 20px;
+        }
+
+        .feature-item p {
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        .feature-item strong {
+            color: var(--text);
+            display: block;
+            margin-bottom: 3px;
+        }
+
+        @media(max-width: 750px) {
+            .assistant-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .chat-box {
+                height: 350px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<nav class="navbar">
+    <a href="dashboard.html" class="logo">
+        <span class="logo-icon">✚</span>
+        MediMate <span class="ai-text">AI</span>
+    </a>
+
+    <div class="nav-links">
+        <a href="dashboard.html">Dashboard</a>
+        <a href="index.html">Sign Out</a>
+    </div>
+</nav>
+
+<main class="assistant-page">
+
+    <header class="page-heading">
+        <h1>✨ AI Health Assistant</h1>
+        <p>Explore common health terms and understand medical information in simpler language.</p>
+    </header>
+
+    <section class="assistant-intro">
+        <div class="ai-icon">✦</div>
+        <h2>Your personal health information companion</h2>
+        <p>
+            Ask about general medical terms, common report abbreviations,
+            or how to prepare questions for your doctor.
+        </p>
+    </section>
+
+    <div class="assistant-grid">
+
+        <aside>
+            <section class="assistant-card">
+                <h2>💡 Try asking</h2>
+
+                <button class="suggestion" data-question="What does haemoglobin mean in a blood report?">
+                    🩸 What is haemoglobin?
+                </button>
+
+                <button class="suggestion" data-question="What is the difference between blood pressure and heart rate?">
+                    ❤️ Blood pressure vs heart rate
+                </button>
+
+                <button class="suggestion" data-question="What does fasting blood sugar mean?">
+                    🧪 What is fasting blood sugar?
+                </button>
+
+                <button class="suggestion" data-question="What questions should I ask my doctor about a blood test report?">
+                    📋 Questions to ask my doctor
+                </button>
+            </section>
+
+            <section class="assistant-card">
+                <h2>🌿 What this assistant can do</h2>
+
+                <div class="feature-item">
+                    <span>📖</span>
+                    <p><strong>Explain terminology</strong>Give simple, general explanations of common health terms.</p>
+                </div>
+
+                <div class="feature-item">
+                    <span>📝</span>
+                    <p><strong>Prepare questions</strong>Help organize questions to discuss with a healthcare professional.</p>
+                </div>
+
+                <div class="feature-item">
+                    <span>💜</span>
+                    <p><strong>Support understanding</strong>Help you learn without replacing professional medical advice.</p>
+                </div>
+            </section>
+        </aside>
+
+        <section class="assistant-card">
+            <h2>💬 Ask MediMate</h2>
+
+            <div class="chat-box" id="chatBox" aria-live="polite">
+                <div class="chat-message bot-message">
+                    Hi! 👋 I'm MediMate's demo assistant.
+
+                    Ask me about a general health term, a common blood-test abbreviation, or questions to discuss with your doctor.
+
+                    This demo uses prepared responses. Live AI will be connected separately.
+                </div>
+            </div>
+
+            <form class="chat-form" id="chatForm">
+                <textarea
+                    id="userQuestion"
+                    placeholder="Type your health-related question..."
+                    maxlength="500"
+                    required></textarea>
+
+                <button type="submit">Send ➤</button>
+            </form>
+
+            <div class="notice">
+                <strong>Important health note:</strong>
+                This demo is educational and does not diagnose conditions,
+                interpret your personal results, or recommend medication changes.
+                For personal medical advice, contact a qualified healthcare professional.
+            </div>
+        </section>
+
+    </div>
+
+</main>
+
+
+<script>
+    const chatBox = document.getElementById("chatBox");
+    const chatForm = document.getElementById("chatForm");
+    const questionInput = document.getElementById("userQuestion");
+
+    function addMessage(message, type) {
+        const bubble = document.createElement("div");
+        bubble.className = "chat-message " + type;
+        bubble.textContent = message;
+        chatBox.appendChild(bubble);
+        chatBox.scrollTop = chatBox.scrollHeight;
+        return bubble;
+    }
+
+    chatForm.addEventListener("submit", async function (event) {
+        event.preventDefault();
+
+        const question = questionInput.value.trim();
+        if (!question) return;
+
+        addMessage(question, "user-message");
+        questionInput.value = "";
+
+        const loading = addMessage(
+            "MediMate is thinking...",
+            "bot-message"
+        );
+
+        const sendButton = chatForm.querySelector(
+            'button[type="submit"]'
+        );
+        sendButton.disabled = true;
+
+        try {
+            const response = await fetch("AIChatServlet", {
+                method: "POST",
+                headers: {
+                    "Content-Type":
+                        "application/x-www-form-urlencoded;charset=UTF-8"
+                },
+                body: new URLSearchParams({
+                    message: question
+                })
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(
+                    data.error || "AI request failed. Status: " + response.status
+                );
+            }
+
+            const answer = data.choices?.[0]?.message?.content;
+
+            if (!answer) {
+                throw new Error("AI response was empty.");
+            }
+
+            loading.textContent = answer;
+
+        } catch (error) {
+            console.error("MediMate AI error:", error);
+            loading.textContent =
+                "Sorry, AI connection failed. " + error.message;
+
+        } finally {
+            sendButton.disabled = false;
+            questionInput.focus();
+        }
+    });
+
+    document.querySelectorAll(".suggestion").forEach(function (button) {
+        button.addEventListener("click", function () {
+            questionInput.value = button.dataset.question;
+            questionInput.focus();
+        });
+    });
+</script>
+</body>
+</html>
