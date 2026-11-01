@@ -8,8 +8,13 @@
     <link rel="stylesheet" href="css/style.css">
 
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
         .medicine-page {
-            max-width: 1000px;
+            width: 100%;
+            max-width: 1100px;
             margin: 35px auto;
             padding: 0 22px;
         }
@@ -20,54 +25,92 @@
 
         .page-heading h1 {
             font-size: 29px;
-            margin-bottom: 8px;
+            margin: 0 0 8px;
         }
 
         .page-heading p {
             color: var(--muted);
             font-size: 14px;
+            margin: 0;
         }
 
         .medicine-grid {
             display: grid;
-            grid-template-columns: 0.9fr 1.1fr;
-            gap: 22px;
+            grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+            gap: 24px;
+            align-items: start;
         }
 
         .medicine-card {
+            min-width: 0;
             background: #FFFFFF;
             border: 1px solid var(--border);
             border-radius: 15px;
             padding: 24px;
             margin-bottom: 22px;
+            box-shadow: 0 4px 16px rgba(50, 30, 90, 0.04);
         }
 
         .medicine-card h2 {
             font-size: 17px;
-            margin-bottom: 20px;
+            line-height: 1.5;
+            margin: 0 0 22px;
+        }
+
+        /* Form layout */
+        .medicine-form {
+            display: flex;
+            flex-direction: column;
+            gap: 17px;
+            width: 100%;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+            gap: 16px;
         }
 
         .form-group {
-            margin-bottom: 16px;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            margin: 0;
         }
 
         .form-group label {
             display: block;
-            font-size: 12px;
+            font-size: 13px;
             font-weight: 600;
-            margin-bottom: 7px;
+            margin-bottom: 8px;
+            line-height: 1.4;
         }
 
         .form-group input,
         .form-group select,
         .form-group textarea {
+            display: block;
             width: 100%;
-            padding: 11px 12px;
+            min-width: 0;
+            max-width: 100%;
+            padding: 12px;
             border: 1px solid var(--border);
             border-radius: 8px;
             background: #FFFFFF;
-            font: inherit;
+            color: #292333;
+            font-family: inherit;
             font-size: 13px;
+            line-height: 1.4;
+            box-sizing: border-box;
+        }
+
+        .form-group input {
+            min-height: 43px;
+        }
+
+        .form-group textarea {
+            min-height: 95px;
+            resize: vertical;
         }
 
         .form-group input:focus,
@@ -80,30 +123,45 @@
         .form-note {
             color: var(--muted);
             font-size: 11px;
-            line-height: 1.6;
-            margin-top: 13px;
+            line-height: 1.7;
+            margin: 13px 0 0;
         }
 
         .medicine-submit {
+            display: block;
             width: 100%;
             border: none;
             border-radius: 9px;
-            padding: 12px;
+            padding: 13px 16px;
             background: var(--purple);
             color: white;
             font-size: 13px;
             font-weight: 600;
             cursor: pointer;
+            transition: background 0.2s ease;
         }
 
         .medicine-submit:hover {
             background: var(--purple-dark);
         }
 
+        .medicine-submit:focus-visible,
+        .delete-btn:focus-visible {
+            outline: 2px solid var(--purple);
+            outline-offset: 3px;
+        }
+
+        .message {
+            margin: 12px 0 0;
+            font-size: 12px;
+            line-height: 1.6;
+            color: var(--purple);
+        }
+
         .medicine-item {
             display: flex;
             align-items: center;
-            gap: 13px;
+            gap: 12px;
             padding: 16px 0;
             border-bottom: 1px solid #F0EDF5;
         }
@@ -130,22 +188,27 @@
 
         .medicine-info h3 {
             font-size: 13px;
+            line-height: 1.5;
             overflow-wrap: anywhere;
+            margin: 0;
         }
 
         .medicine-info p {
             color: var(--muted);
             font-size: 11px;
-            margin-top: 5px;
+            line-height: 1.5;
+            margin: 5px 0 0;
+            overflow-wrap: anywhere;
         }
 
         .medicine-time {
             color: var(--purple);
             background: var(--purple-light);
-            padding: 6px 9px;
+            padding: 7px 9px;
             border-radius: 7px;
             font-size: 11px;
             white-space: nowrap;
+            flex-shrink: 0;
         }
 
         .delete-btn {
@@ -153,9 +216,14 @@
             background: #FFF5F5;
             color: #B43C3C;
             border-radius: 7px;
-            padding: 7px 9px;
+            padding: 8px 10px;
             cursor: pointer;
             font-size: 11px;
+            flex-shrink: 0;
+        }
+
+        .delete-btn:hover {
+            background: #FDE8E8;
         }
 
         .empty-state {
@@ -163,12 +231,7 @@
             text-align: center;
             color: var(--muted);
             font-size: 13px;
-        }
-
-        .message {
-            margin-top: 12px;
-            font-size: 12px;
-            color: var(--purple);
+            line-height: 1.6;
         }
 
         .privacy-note {
@@ -181,13 +244,46 @@
             color: #5D4C7D;
         }
 
-        @media(max-width: 700px) {
+        .notification-help {
+            margin-top: 10px;
+        }
+
+        @media (max-width: 800px) {
             .medicine-grid {
-                grid-template-columns: 1fr;
+                grid-template-columns: minmax(0, 1fr);
+                gap: 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .medicine-page {
+                margin: 24px auto;
+                padding: 0 14px;
+            }
+
+            .page-heading h1 {
+                font-size: 24px;
             }
 
             .medicine-card {
                 padding: 18px;
+            }
+
+            .form-row {
+                grid-template-columns: minmax(0, 1fr);
+                gap: 17px;
+            }
+
+            .medicine-item {
+                flex-wrap: wrap;
+            }
+
+            .medicine-info {
+                flex-basis: calc(100% - 60px);
+            }
+
+            .medicine-time {
+                margin-left: 56px;
             }
         }
     </style>
@@ -200,6 +296,7 @@
         <span class="logo-icon">✚</span>
         MediMate <span class="ai-text">AI</span>
     </a>
+
     <div class="nav-links">
         <a href="dashboard.html">Dashboard</a>
         <a href="index.html">Sign Out</a>
@@ -215,48 +312,65 @@
 
     <div class="medicine-grid">
 
+        <!-- Add medicine form -->
         <section class="medicine-card">
             <h2>＋ Add Medicine Schedule</h2>
-<!-- Existing medicine form ni ee form tho replace cheyyi -->
-<form id="medicineForm"
-      action="MedicineServlet"
-      method="post">
 
-    <label for="medicineName">Medicine Name</label>
-    <input type="text"
-           id="medicineName"
-           name="medicine_name"
-           placeholder="Enter medicine name"
-           required>
+            <form id="medicineForm" class="medicine-form">
 
-    <label for="medicineDose">Dosage</label>
-    <input type="text"
-           id="medicineDose"
-           name="dosage"
-           placeholder="e.g. 1 tablet">
+                <div class="form-group">
+                    <label for="medicineName">Medicine Name</label>
+                    <input
+                        type="text"
+                        id="medicineName"
+                        name="medicine_name"
+                        placeholder="Enter medicine name"
+                        required>
+                </div>
 
-    <label for="medicineTime">Reminder Time</label>
-    <input type="time"
-           id="medicineTime"
-           name="reminder_time"
-           required>
+                <div class="form-group">
+                    <label for="medicineDose">Dosage</label>
+                    <input
+                        type="text"
+                        id="medicineDose"
+                        name="dosage"
+                        placeholder="e.g. 1 tablet">
+                </div>
 
-    <label for="medicineNotes">Notes</label>
-    <textarea id="medicineNotes"
-              name="notes"
-              placeholder="Additional notes"></textarea>
+                <div class="form-group">
+                    <label for="medicineTime">Reminder Time</label>
+                    <input
+                        type="time"
+                        id="medicineTime"
+                        name="reminder_time"
+                        required>
+                </div>
 
-    <button type="submit" class="medicine-submit">
-        + Save Reminder
-    </button>
-</form>
+                <div class="form-group">
+                    <label for="medicineNotes">Notes</label>
+                    <textarea
+                        id="medicineNotes"
+                        name="notes"
+                        placeholder="Additional notes"></textarea>
+                </div>
+
+                <button type="submit" class="medicine-submit">
+                    + Save Reminder
+                </button>
+
+                <p class="message" id="formMessage" role="status"
+                   aria-live="polite"></p>
+            </form>
+
             <p class="form-note">
                 Enter details exactly as prescribed by your doctor.
                 This tracker does not recommend or change medicines or doses.
             </p>
         </section>
 
+        <!-- Saved schedule and settings -->
         <div>
+
             <section class="medicine-card">
                 <h2>📋 Your Saved Schedule</h2>
 
@@ -271,21 +385,26 @@
                 <h2>⏰ Reminder Settings</h2>
 
                 <div class="form-group">
-                    <label for="reminderPermission">
+                    <label for="enableNotifications">
                         Browser Notifications
                     </label>
+
                     <button
                         type="button"
                         class="medicine-submit"
                         id="enableNotifications">
                         Enable Notifications
                     </button>
-                    <p class="message" id="notificationMessage" role="status">
+
+                    <p class="message"
+                       id="notificationMessage"
+                       role="status"
+                       aria-live="polite">
                         Notifications depend on browser permission and settings.
                     </p>
                 </div>
 
-                <p class="form-note">
+                <p class="form-note notification-help">
                     Keep this page open for basic in-page reminder checks.
                     Browser notifications are not guaranteed if the browser
                     is closed, the device sleeps, or permissions are blocked.
@@ -298,8 +417,8 @@
                 prescription and consult your healthcare professional
                 if you have questions about a medicine.
             </div>
-        </div>
 
+        </div>
     </div>
 </main>
 
@@ -312,14 +431,28 @@
     let notifiedToday = {};
 
     try {
-        medicines = JSON.parse(localStorage.getItem("medimateMedicines") || "[]");
-        if (!Array.isArray(medicines)) medicines = [];
+        medicines = JSON.parse(
+            localStorage.getItem("medimateMedicines") || "[]"
+        );
+
+        if (!Array.isArray(medicines)) {
+            medicines = [];
+        }
     } catch (error) {
         medicines = [];
     }
 
     function saveMedicines() {
-        localStorage.setItem("medimateMedicines", JSON.stringify(medicines));
+        localStorage.setItem(
+            "medimateMedicines",
+            JSON.stringify(medicines)
+        );
+
+        localStorage.setItem(
+            "medimateMedicineCount",
+            String(medicines.length)
+        );
+
         renderMedicines();
     }
 
@@ -340,6 +473,7 @@
             const icon = document.createElement("div");
             icon.className = "medicine-icon";
             icon.textContent = "💊";
+            icon.setAttribute("aria-hidden", "true");
 
             const info = document.createElement("div");
             info.className = "medicine-info";
@@ -349,7 +483,9 @@
 
             const details = document.createElement("p");
             details.textContent =
-                [medicine.dose, medicine.notes].filter(Boolean).join(" · ") ||
+                [medicine.dose, medicine.notes]
+                    .filter(Boolean)
+                    .join(" · ") ||
                 "No extra instructions added";
 
             const time = document.createElement("span");
@@ -360,12 +496,18 @@
             remove.type = "button";
             remove.className = "delete-btn";
             remove.textContent = "Delete";
+            remove.setAttribute(
+                "aria-label",
+                "Delete reminder for " + medicine.name
+            );
 
             remove.addEventListener("click", function () {
                 medicines = medicines.filter(function (entry) {
                     return entry.id !== medicine.id;
                 });
+
                 saveMedicines();
+                formMessage.textContent = "Reminder deleted.";
             });
 
             info.appendChild(name);
@@ -379,24 +521,36 @@
             list.appendChild(item);
         });
 
-        localStorage.setItem("medimateMedicineCount", medicines.length);
+        localStorage.setItem(
+            "medimateMedicineCount",
+            String(medicines.length)
+        );
     }
 
     form.addEventListener("submit", function (event) {
         event.preventDefault();
 
-        const name = document.getElementById("medicineName").value.trim();
-        const dose = document.getElementById("medicineDose").value.trim();
-        const time = document.getElementById("medicineTime").value;
-        const notes = document.getElementById("medicineNotes").value.trim();
+        const name =
+            document.getElementById("medicineName").value.trim();
+
+        const dose =
+            document.getElementById("medicineDose").value.trim();
+
+        const time =
+            document.getElementById("medicineTime").value;
+
+        const notes =
+            document.getElementById("medicineNotes").value.trim();
 
         if (!name || !time) {
-            formMessage.textContent = "Please enter medicine name and time.";
+            formMessage.textContent =
+                "Please enter medicine name and reminder time.";
             return;
         }
 
         medicines.push({
-            id: Date.now().toString() + Math.random().toString(16).slice(2),
+            id: Date.now().toString() +
+                Math.random().toString(16).slice(2),
             name: name,
             dose: dose,
             time: time,
@@ -405,31 +559,43 @@
 
         saveMedicines();
         form.reset();
+
         formMessage.textContent = "Reminder saved successfully!";
     });
 
-    document.getElementById("enableNotifications").addEventListener("click", async function () {
-        const message = document.getElementById("notificationMessage");
+    document
+        .getElementById("enableNotifications")
+        .addEventListener("click", async function () {
+            const message =
+                document.getElementById("notificationMessage");
 
-        if (!("Notification" in window)) {
-            message.textContent = "This browser does not support notifications.";
-            return;
-        }
+            if (!("Notification" in window)) {
+                message.textContent =
+                    "This browser does not support notifications.";
+                return;
+            }
 
-        try {
-            const permission = await Notification.requestPermission();
-            message.textContent = permission === "granted"
-                ? "Notifications allowed. Keep this page open for reminder checks."
-                : "Notification permission was not granted.";
-        } catch (error) {
-            message.textContent = "Could not enable browser notifications.";
-        }
-    });
+            try {
+                const permission =
+                    await Notification.requestPermission();
+
+                message.textContent = permission === "granted"
+                    ? "Notifications allowed. Keep this page open for reminder checks."
+                    : "Notification permission was not granted.";
+            } catch (error) {
+                message.textContent =
+                    "Could not enable browser notifications.";
+            }
+        });
 
     function checkMedicineReminders() {
         const now = new Date();
-        const currentTime = String(now.getHours()).padStart(2, "0") +
-            ":" + String(now.getMinutes()).padStart(2, "0");
+
+        const currentTime =
+            String(now.getHours()).padStart(2, "0") +
+            ":" +
+            String(now.getMinutes()).padStart(2, "0");
+
         const today = now.toDateString();
 
         medicines.forEach(function (medicine) {
@@ -438,14 +604,20 @@
             if (medicine.time === currentTime && !notifiedToday[key]) {
                 notifiedToday[key] = true;
 
-                if ("Notification" in window &&
-                    Notification.permission === "granted") {
+                if (
+                    "Notification" in window &&
+                    Notification.permission === "granted"
+                ) {
                     new Notification("MediMate AI Reminder", {
-                        body: "Check your prescribed schedule: " + medicine.name
+                        body:
+                            "Check your prescribed schedule: " +
+                            medicine.name
                     });
                 } else {
-                    alert("MediMate AI reminder: Check your prescribed schedule for " +
-                        medicine.name);
+                    alert(
+                        "MediMate AI reminder: Check your prescribed " +
+                        "schedule for " + medicine.name
+                    );
                 }
             }
         });
@@ -454,6 +626,7 @@
     renderMedicines();
     setInterval(checkMedicineReminders, 30000);
 </script>
+
 <script src="js/reminders.js"></script>
 
 </body>
